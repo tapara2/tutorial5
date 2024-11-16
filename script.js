@@ -2,7 +2,7 @@
 //number of circles we have in the game
 var numCircles = 6;
 //The colour variable should be an array that contains as many random RGB colours as there are circles. 
-var colours = [];
+var colours = [];  
 //This pickedColor is the RGB color we are trying to guess (string)
 var pickedColor;
 //This is the default colour of the game. 
@@ -15,7 +15,6 @@ var resultMessage
 var banner 
 var resetButton 
 
-
 init();
 
 //The init function should reset the stage and set a new RGB color
@@ -23,14 +22,11 @@ function init() {
 	//Call the reset function
 	reset();
 	//Set the text of the colourToGuess element to display the correct RGB color
-    document.getElementById("colourToGuess").textContent = `RGB(${colourToGuess})`;
-	
+    document.getElementById("colourToGuess").textContent = `RGB(${pickedColor})`;
 }
 
-
 //Setup so that when the reset button is clicked, the reset function gets called 
-
-
+document.getElementById("resetButton").addEventListener("click", reset);
 
 //Define what should happen when any circle is clicked. 
 //When a circle is clicked, it should check if the color of a circle 
@@ -42,14 +38,14 @@ function init() {
 function clickCircle() {
 	const clickedColor = this.style.backgroundColor;
     
-    if (clickedColor === colourToGuess) {
+    if (clickedColor === pickedColor) {
         document.getElementById("resultText").textContent = "You win";
         document.getElementById("resetButton").textContent = "Play again";
         
         document.querySelectorAll(".circle").forEach(circle => {
-            circle.style.backgroundColor = colourToGuess;
+            circle.style.backgroundColor = pickedColor;
         });
-        document.getElementById("banner").style.backgroundColor = colourToGuess;
+        document.getElementById("banner").style.backgroundColor = pickedColor;
     } else {
         this.style.backgroundColor = "#7d7d7d";
         document.getElementById("resultText").textContent = "Try again";
@@ -66,9 +62,9 @@ function clickCircle() {
 // Ensure that if a circle is clicked that the clickCircle function is called. 
 function reset() {
 	colours = genRandomColours();
-    colourToGuess = chooseColor();
+    pickedColor = chooseColor();
 
-    document.getElementById("colourToGuess").textContent = `RGB(${colourToGuess})`;
+    document.getElementById("colourToGuess").textContent = `RGB(${pickedColor})`;
     
     const circles = document.querySelectorAll(".circle");
     circles.forEach((circle, index) => {
@@ -76,11 +72,11 @@ function reset() {
         circle.addEventListener("click", clickCircle);
     });
     
-    document.getElementById("banner").style.backgroundColor = "#4e4e4e";
+    document.getElementById("banner").style.backgroundColor = defaultColour;
     document.getElementById("resetButton").textContent = "Restart";
     document.getElementById("resultText").textContent = "";
-
 }
+
 //Write a function to make a random RGB color. For RGB colours are 
 // made up of 3 values from 0 to 256. You should basically generate 3 random 
 // numbers and create a string "rgb(0,0,0)" but replace the 0 with random values. 
@@ -92,15 +88,14 @@ function makeColour() {
     return `rgb(${red}, ${green}, ${blue})`;
 }
 
-
 // Write a function that will set new values for the colours array.
 // It should contain as many RGB color strings as there are circles
 function genRandomColours() {
-	const Array = [];
-    for (let i = 0; i < 6; i++) {
+	const colorsArray = [];
+    for (let i = 0; i < numCircles; i++) {
         colorsArray.push(makeColour());
     }
-    return Array;
+    return colorsArray;
 }
 
 //return one of the 6 RGB colours you created and stored in colours
@@ -109,6 +104,5 @@ function chooseColor() {
 	const rand = Math.floor(Math.random() * colours.length);
     return colours[rand];
 }
-
 
 
